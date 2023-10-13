@@ -1,10 +1,9 @@
 import { Schema } from 'mongoose';
-import uniblox from '../../config'
+import uniblox from '../../config/index.js';
 
 const userSchema = new Schema({
     firstName: {
         type: String,
-        required: true,
         min: 3
     },
     lastName: {
@@ -19,7 +18,7 @@ const userSchema = new Schema({
     password: {
         type: String,
         min: 6,
-        unique: true
+        required: true,
     },
     mobileNumber: {
         type: Number,
@@ -50,5 +49,5 @@ const userSchema = new Schema({
     timestamps: true
 })
 
-const userModel = uniblox.model('Users', userSchema);
-export default userModel;
+const Users = uniblox.model('Users', userSchema);
+export default Users;
