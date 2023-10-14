@@ -31,22 +31,34 @@ export const addToCart = async ({ ACTIVE_USER = {}, body = {} }, res, next) => {
         const product = await Products.findOne({ _id: productId });
         if (_.isEmpty(product)) throw new Error('Product not found.');
 
-        let cart = await Carts.findOne({ user: ACTIVE_USER._id });
-        if (_.isEmpty(cart)) cart = new Carts({ user: ACTIVE_USER._id, items: [] })
+        let cart = await Carts.findOne({ user: ACTIVE_USER?._id });
+        if (_.isEmpty(cart)) cart = new Carts({ user: ACTIVE_USER?._id, items: [] })
 
         const price = _.multiply(product?.price, quantity);
-        const existingItem = cart.items.findIndex((item) => item.product.toString() === productId);
+        const existingItem = cart?.items?.findIndex((item) => item?.product?.toString() === productId);
 
         if (!_.isEqual(existingItem, -1)) {
             cart.items[existingItem].quantity += quantity;
             cart.items[existingItem].price += price;
         } else {
-            cart.items.push({ product: product._id, quantity, price });
+            cart.items.push({ product: product?._id, quantity, price });
         }
 
         cart.totalAmount += price;
         await cart.save();
         return res.status(201).send({ message: 'Item added to cart' });
+    } catch (error) {
+        next(error)
+    }
+};
+
+
+export const getCartItems = async ({ ACTIVE_USER }, res, next) => {
+    try {
+        const cart = await Carts.findOne({ user: ACTIVE_USER?._id });
+
+        if (_.isEmpty(cart)) return res.status(200).send(cart);
+        return res.status(200).send(cart);
     } catch (error) {
         next(error)
     }
