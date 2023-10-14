@@ -52,6 +52,14 @@ export const addToCart = async ({ ACTIVE_USER = {}, body = {} }, res, next) => {
     }
 };
 
+/**
+ * Get Cart Items
+ * 
+ * @param {*} param0 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns cart details
+ */
 
 export const getCartItems = async ({ ACTIVE_USER }, res, next) => {
     try {
