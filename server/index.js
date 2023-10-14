@@ -7,6 +7,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import auth from './routes/auth/index.js';
 import errorHandler from './middlewares/error/index.js';
+import createDummyProductData from './utils/seed.js';
 
 const app = express();
 
@@ -35,6 +36,9 @@ app.use(cookieParser());
 app.use(cors());
 app.use(helmet());
 app.use(limiter);
+
+// seeding data to database
+createDummyProductData();
 
 // api's endpoint
 app.use('/api/auth', auth);
