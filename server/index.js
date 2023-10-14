@@ -6,8 +6,10 @@ import { rateLimit } from 'express-rate-limit';
 import cors from 'cors';
 import helmet from 'helmet';
 import auth from './routes/auth/index.js';
+import cart from './routes/cart/index.js';
 import errorHandler from './middlewares/error/index.js';
 import createDummyProductData from './utils/seed.js';
+import { auth as validateUser, isAdmin } from './middlewares/auth/index.js'
 
 const app = express();
 
@@ -42,6 +44,7 @@ createDummyProductData();
 
 // api's endpoint
 app.use('/api/auth', auth);
+app.use('/api/cart', validateUser, cart)
 
 // error handler
 app.use((err, req, res, next) => {
