@@ -4,11 +4,11 @@ import uniblox from '../../config/index.js';
 const userSchema = new Schema({
     firstName: {
         type: String,
-        min: 3
+        minlength: 3
     },
     lastName: {
         type: String,
-        min: 3
+        minlength: 3
     },
     email: {
         type: String,
@@ -17,7 +17,7 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        min: 6,
+        minlength: 6,
         required: true,
     },
     mobileNumber: {
