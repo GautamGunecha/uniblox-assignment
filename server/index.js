@@ -13,6 +13,7 @@ import analytics from './routes/analytics/index.js'
 import errorHandler from './middlewares/error/index.js';
 import seedData from './utils/seed.js';
 import { auth as validateUser, isAdmin } from './middlewares/auth/index.js'
+import _ from 'lodash';
 
 const app = express();
 
@@ -46,7 +47,7 @@ app.use(limiter);
 seedData();
 
 // api's endpoint
-app.get('/', (req, res) => res.status(200).send({ message: 'Hello World! ' }))
+app.get('/', (req, res) => res.status(200).send({ message: 'Connected to backend Server!' }))
 
 app.use('/api/auth', auth);
 app.use('/api/cart', validateUser, cart);
@@ -64,6 +65,8 @@ app.use((err, req, res, next) => {
 
 // setting server port to - 3000
 const port = process.env.PORT || 3000;
-const server = app.listen(port, () => console.log(`server is running on port: ${port}`.warn));
 
-export default server;
+if (!_.isEqual(process.env.NODE_ENV, 'TEST'))
+    app.listen(port, () => console.log(`server is running on port: ${port}`.warn));
+
+export default app;
