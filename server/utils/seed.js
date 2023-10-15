@@ -9,28 +9,31 @@ import bcryptjs from 'bcryptjs';
 const seedData = async () => {
     try {
         const usersData = [];
-        for (let idx = 0; idx < dummyUsers.length; idx++) {
-            const { firstName, lastName, email, password, isAdmin, mobileNumber } = dummyUsers[idx]
-            const salt = bcryptjs.genSaltSync(13);
-            const hashedPassword = bcryptjs.hashSync(password, salt);
-            usersData.push({
-                firstName,
-                lastName,
-                email,
-                password: hashedPassword,
-                isAdmin,
-                mobileNumber
-            })
-        }
 
-        const users = await Users.find({});
+        const users = await Users.findOne({});
         if (_.isEmpty(users)) {
             console.log('seeding dummy user data to database.'.warn);
-            await Users.insertMany(usersData)
+
+            for (let idx = 0; idx < dummyUsers.length; idx++) {
+                const { firstName, lastName, email, password, isAdmin, mobileNumber } = dummyUsers[idx]
+                const salt = bcryptjs.genSaltSync(13);
+                const hashedPassword = bcryptjs.hashSync(password, salt);
+                usersData.push({
+                    firstName,
+                    lastName,
+                    email,
+                    password: hashedPassword,
+                    isAdmin,
+                    mobileNumber
+                })
+            };
+
+            await Users.insertMany(usersData);
+            
             console.log('Dummy user data created successfully.'.info);
         }
 
-        const product = await Products.find({});
+        const product = await Products.findOne({});
         if (_.isEmpty(product)) {
             console.log('seeding dummy product data to database.'.warn);
             await Products.insertMany(dummyProducts);
