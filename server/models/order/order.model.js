@@ -43,7 +43,6 @@ const orderSchema = new Schema({
         type: Number,
         default: 0,
     },
-
 }, { timestamps: true })
 
 const Orders = uniblox.model('Orders', orderSchema);
