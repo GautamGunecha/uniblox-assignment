@@ -10,7 +10,7 @@ import cart from './routes/cart/index.js';
 import coupons from './routes/coupons/index.js';
 import checkout from './routes/checkout/index.js';
 import errorHandler from './middlewares/error/index.js';
-import createDummyProductData from './utils/seed.js';
+import seedData from './utils/seed.js';
 import { auth as validateUser, isAdmin } from './middlewares/auth/index.js'
 
 const app = express();
@@ -42,7 +42,7 @@ app.use(helmet());
 app.use(limiter);
 
 // seeding data to database
-createDummyProductData();
+seedData();
 
 // api's endpoint
 app.use('/api/auth', auth);
