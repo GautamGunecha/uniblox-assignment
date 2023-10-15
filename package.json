@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon server/index.js",
-    "start": "node server/index.js",
-    "build": "npm install && npm install --prefix client && npm run build --prefix client"
+    "start": "node server/index.js"
   },
   "author": "GautamGunecha",
   "license": "MIT",
@@ -26,6 +25,7 @@
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "mongodb": "^6.1.0",
     "mongoose": "^7.6.2"
   }
 }
