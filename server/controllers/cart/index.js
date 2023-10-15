@@ -71,3 +71,53 @@ export const getCartItems = async ({ ACTIVE_USER }, res, next) => {
         next(error)
     }
 };
+
+/**
+ * Remove Item from User Cart.
+ * 
+ * * Validating product details and cart items details.
+ * * Finding the index for item to be removed from cart.
+ * * Getting single product price which can be used for amount calculations.
+ * * Checking if productToRemove quantity is greater quantity of product present in cart.
+ * * else remove that product and calculate price difference.
+ * 
+ * @param {ACTIVE_USER, query} param0 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
+export const removeFromCart = async ({ ACTIVE_USER = {}, query = {} }, res, next) => {
+    try {
+        const { productId, quantity } = query
+        if (_.isEmpty(productId) || _.isEmpty(quantity)) throw new Error('Required product details to remove them from cart.');
+
+        const userCart = await Carts.findOne({ user: ACTIVE_USER?._id });
+        if (_.isEmpty(userCart)) throw new Error('User does not have cart assigned.');
+
+        const product = await Products.findOne({ _id: productId });
+        if (_.isEmpty(product)) throw new Error('Product does not exists.');
+
+        const productIndex = _.findIndex(userCart?.items, item => item?.product.toString() === productId);
+        if (productIndex === -1)
+            throw new Error('Product not found in the cart.');
+
+        const productToRemove = userCart?.items[productIndex];
+        const productPrice = product?.price || 0;
+
+        if (quantity && productToRemove.quantity > quantity) {
+            productToRemove.quantity -= quantity;
+            userCart.totalAmount -= quantity * productPrice;
+            productToRemove.price -= quantity * productPrice;
+        } else {
+            const removedQuantity = productToRemove.quantity;
+            userCart.items.splice(productIndex, 1);
+            userCart.totalAmount -= removedQuantity * productPrice;
+        }
+
+        await userCart.save();
+        return res.json({ message: 'Product removed from the cart successfully.' });
+
+    } catch (error) {
+        next(error)
+    }
+};
