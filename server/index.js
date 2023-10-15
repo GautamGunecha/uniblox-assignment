@@ -9,6 +9,7 @@ import auth from './routes/auth/index.js';
 import cart from './routes/cart/index.js';
 import coupons from './routes/coupons/index.js';
 import checkout from './routes/checkout/index.js';
+import analytics from './routes/analytics/index.js'
 import errorHandler from './middlewares/error/index.js';
 import seedData from './utils/seed.js';
 import { auth as validateUser, isAdmin } from './middlewares/auth/index.js'
@@ -47,8 +48,10 @@ seedData();
 // api's endpoint
 app.use('/api/auth', auth);
 app.use('/api/cart', validateUser, cart);
-app.use('/api/coupon', isAdmin, coupons);
 app.use('/api/checkout', validateUser, checkout);
+
+app.use('/api/coupon', isAdmin, coupons);
+app.use('/api/analytics', isAdmin, analytics);
 
 // error handler
 app.use((err, req, res, next) => {
@@ -56,7 +59,6 @@ app.use((err, req, res, next) => {
     res.status(errorObject?.statusCode || err.statusCode || 500).json(errorObject || err);
     next();
 });
-
 
 // setting server port to - 3000
 const port = process.env.PORT || 3000;
