@@ -5,7 +5,14 @@ import colors from 'colors';
 import { rateLimit } from 'express-rate-limit';
 import cors from 'cors';
 import helmet from 'helmet';
-import errorHandler from './middlewares/errorHandler.js';
+import auth from './routes/auth/index.js';
+import cart from './routes/cart/index.js';
+import coupons from './routes/coupons/index.js';
+import checkout from './routes/checkout/index.js';
+import analytics from './routes/analytics/index.js'
+import errorHandler from './middlewares/error/index.js';
+import seedData from './utils/seed.js';
+import { auth as validateUser, isAdmin } from './middlewares/auth/index.js'
 
 const app = express();
 
@@ -35,8 +42,23 @@ app.use(cors());
 app.use(helmet());
 app.use(limiter);
 
+// seeding data to database
+seedData();
+
+// api's endpoint
+app.use('/api/auth', auth);
+app.use('/api/cart', validateUser, cart);
+app.use('/api/checkout', validateUser, checkout);
+
+app.use('/api/coupon', isAdmin, coupons);
+app.use('/api/analytics', isAdmin, analytics);
+
 // error handler
-app.use(errorHandler)
+app.use((err, req, res, next) => {
+    const errorObject = errorHandler({ err, req });
+    res.status(errorObject?.statusCode || err.statusCode || 500).json(errorObject || err);
+    next();
+});
 
 // setting server port to - 3000
 const port = process.env.PORT || 3000;
