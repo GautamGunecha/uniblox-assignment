@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon server/index.js",
     "start": "node server/index.js",
-    "test": "jest",
+    "test": "NODE_ENV=TEST jest --detectOpenHandles",
     "build": "npm install && npm install --prefix client && npm run build --prefix client"
   },
   "author": "GautamGunecha",
