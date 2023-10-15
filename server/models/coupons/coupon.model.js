@@ -33,5 +33,5 @@ const couponSchema = new Schema({
     timestamps: true
 });
 
-const Coupons = uniblox.model('coupons', couponSchema);
+const Coupons = uniblox.model('Coupons', couponSchema);
 export default Coupons;

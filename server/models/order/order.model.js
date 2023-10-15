@@ -26,22 +26,32 @@ const orderSchema = new Schema({
         required: true,
     },
     items: [orderItemSchema],
-    totalAmount: {
-        type: Number,
-        required: true,
-        default: 0,
+    amount: {
+        total: {
+            type: Number,
+            required: true,
+        },
+        discountPercent: {
+            type: Number,
+            default: 0
+        },
+        discount: {
+            type: Number,
+            default: 0,
+        },
+        paid: {
+            type: Number,
+            required: true,
+        }
     },
-    discountCode: {
-        type: String,
-        default: null,
+    coupon: {
+        type: Schema.Types.ObjectId,
+        ref: 'Coupons',
+        default: null
     },
     placedOn: {
         type: Date,
         default: Date.now,
-    },
-    discountAmount: {
-        type: Number,
-        default: 0,
     },
 }, { timestamps: true })
 
