@@ -46,6 +46,8 @@ app.use(limiter);
 seedData();
 
 // api's endpoint
+app.get('/', (req, res) => res.status(200).send({ message: 'Hello World! ' }))
+
 app.use('/api/auth', auth);
 app.use('/api/cart', validateUser, cart);
 app.use('/api/checkout', validateUser, checkout);
