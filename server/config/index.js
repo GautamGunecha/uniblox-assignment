@@ -14,21 +14,26 @@ function makeMongoConnection(uri) {
     useUnifiedTopology: true,
   });
 
-  db.on('error', function (error) {
-    console.log(`MongoDB :: connection ${this.name} ${JSON.stringify(error)}`);
-    db.close().catch(() => console.log(`MongoDB :: failed to close connection ${this.name}`.green));
-  });
+  const env = process.env.NODE_ENV || ''
 
-  db.on('connected', function () {
-    mongoose.set('debug', function (col, method, query, doc) {
-      console.log(`MongoDB :: ${this.conn.name} ${col}.${method}(${JSON.stringify(query)},${JSON.stringify(doc)})`.green);
+  if (!_.isEqual(env, "TEST")) {
+    db.on('error', function (error) {
+      console.log(`MongoDB :: connection ${this.name} ${JSON.stringify(error)}`);
+      db.close().catch(() => console.log(`MongoDB :: failed to close connection ${this.name}`.green));
     });
-    console.log(`MongoDB :: connected ${this.name}`.green);
-  });
 
-  db.on('disconnected', function () {
-    console.log(`MongoDB :: disconnected ${this.name}`.red);
-  });
+    db.on('connected', function () {
+      mongoose.set('debug', function (col, method, query, doc) {
+        console.log(`MongoDB :: ${this.conn.name} ${col}.${method}(${JSON.stringify(query)},${JSON.stringify(doc)})`.green);
+      });
+      console.log(`MongoDB :: connected ${this.name}`.green);
+    });
+
+    db.on('disconnected', function () {
+      console.log(`MongoDB :: disconnected ${this.name}`.red);
+    });
+
+  }
 
   return db;
 }
