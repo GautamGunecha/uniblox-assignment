@@ -16,14 +16,15 @@
     "@babel/core": "^7.23.2",
     "@babel/preset-env": "^7.23.2",
     "@babel/register": "^7.22.15",
+    "cookie": "^0.5.0",
     "jest": "^29.7.0",
+    "mongodb-memory-server": "^9.0.1",
     "nodemon": "^3.0.1",
     "supertest": "^6.3.3"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
-    "cookie": "^0.5.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
